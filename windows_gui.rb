@@ -3,6 +3,7 @@ require_relative 'windows_gui_raw.rb'
 module WindowsGUI
   WM_GETTEXT = 0xD
   WM_SETTEXT = 0xC
+  WM_COMMAND = 0x111
   BM_CLICK = 0xF5
 
   module_function
@@ -52,5 +53,13 @@ module WindowsGUI
     end
     WindowsGUIRaw.EnumDesktopWindows(nil, enumWindowCallback, 0)
     return windows
+  end
+
+  def menu_command(handle, id)
+    WindowsGUIRaw.PostMessageA( handle, WM_COMMAND, id, nil )
+  end
+
+  def window_exists?(window)
+    WindowsGUIRaw.IsWindow( window )
   end
 end

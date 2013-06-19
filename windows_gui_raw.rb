@@ -23,4 +23,5 @@ module WindowsGUIRaw
   attach_function :GetDlgItem, [ HWND, INT ], HWND
   attach_function :EnumDesktopWindows, [ :pointer, :enum_callback, :long ], :bool
   attach_function :GetWindowTextA, [ :long, :pointer, :int ], :int
+  attach_function :IsWindow, [ HWND ], :bool
 end
