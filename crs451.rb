@@ -3,7 +3,7 @@ require_relative 'windows_gui.rb'
 
 class CRS600
   def initialize(*args)
-    @agency_id, @agency_name = args
+    @agency_id, @agency_name, @routes = args
     @database_dir = "#{ ENV['HOME']+'/Desktop' }"
 
     program_files = "#{ ENV['ProgramFiles(x86)'] || ENV['ProgramFiles'] }#{ '/DRI/CRS600' }"
@@ -62,9 +62,26 @@ class CRS600
   end
 end
 
+trips_gtfs = CSV.open('trips.txt', headers: true)
+routes_gtfs = CSV.open('routes.txt', headers: true)
+
+routes = {}
+CSV.foreach('tripstoDSC.txt', headers: true) do |row|
+  trip_gtfs = trips_gtfs.find { |t| t['trip_id'] == row['trip'] }
+  route_gtfs = routes_gtfs.find { |r| r['route_id'] == trip_gtfs['route_id'] }
+
+  route = [route_gtfs['route_short_name'], route_gtfs['route_long_name'], trip_gtfs['trip_headsign']]
+  
+  if routes[row['DSC']].nil?
+    routes[row['DSC']] = route
+  elsif routes[row['DSC']] != route
+    raise "DSC #{row['DSC']} assigned to more than one variant"
+  end
+end
+
 agency_id = CSV.new(File.open('agency.txt'), headers: true).readline['agency_id']
 agency_name = CSV.new(File.open('agency.txt'), headers: true).readline['agency_name']
 
-crs600 = CRS600.new agency_id, agency_name
+crs600 = CRS600.new agency_id, agency_name, routes
 
 crs600.landing :new_database
