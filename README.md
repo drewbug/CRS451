@@ -3,4 +3,5 @@ CRS451
 
 Automatically input data into Digital Recorders® CRS600 software
 
-The name is a somewhat-snarky commentary on the distopia we'd live in if everyone had the Farenheit-451-like hatred of free information that Digital Recorders® has.
+> Usually the source code for a proprietary program is kept secret by the owner, lest anybody else learn something from it. <br/>
+> -- Richard M. Stallman
